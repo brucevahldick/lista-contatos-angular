@@ -1,0 +1,71 @@
+<!doctype html>
+<html ng-app="ContatoFormApp">
+<head>
+    <meta charset="utf-8">
+    <title>App</title>
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css"/>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <script src="js/register-user.js"></script>
+</head>
+<body ng-controller="ContatoFormController">
+<div class="container-fluid">
+    <h1 ng-if="action == 'inserirContato'">Criar Contato</h1>
+    <h1 ng-if="action == 'editarContato'">Editar Contato - {{contato.prnome}} {{contato.sbrnome}}</h1>
+    <form class="col-md-5" ng-submit="insereContato()">
+        <div class="form-group">
+            <label for="prnome">Nome</label>
+            <input class="form-control" type="text" name="prnome" ng-model="contato.prnome" placeholder="Primeiro Nome"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="sbrnome">Sobrenome</label>
+            <input class="form-control" type="text" name="sbrnome" ng-model="contato.sbrnome" placeholder="Sobrenome"
+                   required>
+        </div>
+        <div class="form-group" ng-repeat="fc in contato.formasDeContato">
+            <div class="form-group">
+                <label for="tipo-contato">Selecione o Tipo de Contato</label>
+                <select class="form-control" ng-model="fc.tipoContato"
+                        ng-options="option for option in tiposContato"></select>
+            </div>
+            <div class="form-group" ng-if="fc.tipoContato">
+                <label for="contato">Contato</label>
+                <input type="text" class="form-control" ng-model="fc.info"
+                       placeholder="Contato" ng-required="fc.tipoContato != null">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-danger" type="button" ng-if="fc.id" ng-click="removerFormaDeContatoContato(fc.id, contato.id)">
+                    Remover forma de contato
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" ng-click="addFormaDeContato()">Adicionar Contato</button>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-success" type="submit">Confirmar</button>
+            <button class="btn btn-danger" type="reset" ng-if="action == 'inserirContato'">Cancelar</button>
+            <button class="btn btn-danger" ng-if="action == 'editarContato'" ng-click="trocaAcaoParaInserir()">
+                Cancelar Edição
+            </button>
+        </div>
+    </form>
+</div>
+<div class="container-fluid">
+    <h1>Contatos</h1>
+    <div ng-repeat="ctc in contatos">
+        <h3>
+            <span>{{ctc.prnome}}</span>
+            <span>{{ctc.sbrnome}}</span>
+            <button class="btn btn-danger" ng-click="removeContato(ctc.id)" type="button">Remover</button>
+            <button class="btn btn-warning" ng-click="trocaAcaoParaEditar(ctc)" type="button">Editar</button>
+            <!--            <p ng-repeat="fct in ctc.formasDeContato">-->
+            <!--                <span>{{fct.info}}</span>-->
+            <!--                <span>({{fct.tipoContato}})</span>-->
+            <!--            </p>-->
+        </h3>
+    </div>
+</div>
+</body>
+</html>
